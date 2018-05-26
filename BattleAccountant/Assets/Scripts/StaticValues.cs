@@ -12,8 +12,7 @@ public static class StaticValues {
     public static int MaxCrew = 15;
     public static string[] CrewFirstNames= { "Bill" , "Tom", "Darius", "Max", "Jericho", "Marcus", "Luke"
     ,"Abel", "Adam", "Alexis", "August", "Barry", "Brian", "Carmen", "Casey"};
-    public static string[] MechModelNames = {"Mad Cat", "Atlas", "Prometheus",
-    "Ragnarok", "Rifleman", "Owens", "Star Adder"};
+    public static string[] MechModelNames = { "Mad Cat", "Rifleman", "Star Adder" };
 
     public static string GenerateFirstName()
     {
