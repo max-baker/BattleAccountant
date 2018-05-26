@@ -13,6 +13,7 @@ public static class StaticValues {
     public static string[] CrewFirstNames= { "Bill" , "Tom", "Darius", "Max", "Jericho", "Marcus", "Luke"
     ,"Abel", "Adam", "Alexis", "August", "Barry", "Brian", "Carmen", "Casey"};
     public static string[] MechModelNames = { "Mad Cat", "Rifleman", "Star Adder" };
+    public static string[] MechNames = { "Alyosius", "Valerian", "Olympus" , "Canus"};
 
     public static string GenerateFirstName()
     {
@@ -22,6 +23,11 @@ public static class StaticValues {
     public static string GenerateMechModel()
     {
         return MechModelNames[(int)Random.Range(0, MechModelNames.Length)];
+    }
+
+    public static string GenerateMechName()
+    {
+        return MechNames[(int)Random.Range(0, MechNames.Length)];
     }
 
     public static int DaysInMonth(int month)

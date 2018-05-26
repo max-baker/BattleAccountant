@@ -10,20 +10,23 @@ public class MechManager : MonoBehaviour {
     {
         public string model;
         public int age;
+        public string name;
 
         public MechData()
         {
             age = (int)Random.Range(1, 20);
             model = StaticValues.GenerateMechModel();
+            name = StaticValues.GenerateMechName();
         }
 
         public string OutputMechString()
         {
-            return model + " : " + age + " Years Old";
+            return name+" : "+model + " : " + age + " Years Old";
         }
     }
 
     private List<MechData> CurrentMechs;
+    private int MechIndex;
     public GameObject MechButton;
     public GameObject MechContainer;
     public GameObject UICanvas;
@@ -31,6 +34,7 @@ public class MechManager : MonoBehaviour {
     public GameObject MechImage2;
     public GameObject MechImage3;
     public GameObject MechImageBG;
+    public GameObject MechDataHolder;
     [HideInInspector] public List<GameObject> MechHolderUIList = new List<GameObject>();
 
     // Use this for initialization
@@ -87,14 +91,14 @@ public class MechManager : MonoBehaviour {
 
     public void ShowMechDetails()
     {
-        int mechIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
+        MechIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
         gameObject.GetComponent<UIManager>().HideAllMenus();
-        print(CurrentMechs[mechIndex].OutputMechString());
+        print(CurrentMechs[MechIndex].OutputMechString());
         GameObject MechHolder = Instantiate(MechImageBG);
         MechHolder.transform.position = MechImageBG.transform.position;
         MechHolderUIList.Add(MechHolder);
         GameObject MechImageObj;
-        switch (CurrentMechs[mechIndex].model)
+        switch (CurrentMechs[MechIndex].model)
         {
             case ("Mad Cat"):
                 MechImageObj = Instantiate(MechImage1);               
@@ -112,7 +116,44 @@ public class MechManager : MonoBehaviour {
         }
         MechImageObj.transform.position = MechImage1.transform.position;
         MechHolderUIList.Add(MechImageObj);
-        AddBackButton();
+
+        GameObject MechDetails = Instantiate(MechDataHolder);
+        MechDetails.SetActive(true);
+        MechDetails.transform.SetParent(UICanvas.transform);
+        MechDetails.transform.position = MechDataHolder.transform.position;
+        MechDetails.transform.localScale = MechDataHolder.transform.localScale;
+        Text[] TextFields = MechDetails.GetComponentsInChildren<Text>();
+        foreach(Text attr in TextFields)
+        {
+            if (attr.gameObject.name == "Placeholder")
+            {
+                attr.text = CurrentMechs[MechIndex].name;
+            }
+            if (attr.gameObject.name == "MechModel")
+            {
+                attr.text = CurrentMechs[MechIndex].model;
+            }
+            if (attr.gameObject.name == "MechAge")
+            {
+                attr.text = CurrentMechs[MechIndex].age.ToString()+ " Years Old";
+            }
+        }
+        MechDetails.GetComponentInChildren<InputField>().onValueChanged.AddListener(ChangeMechName);
+        MechHolderUIList.Add(MechDetails);
+
+        GameObject HideMechButton = Instantiate(MechButton);
+        HideMechButton.GetComponent<Button>().interactable = true;
+        HideMechButton.transform.SetParent(UICanvas.transform);
+        HideMechButton.GetComponentInChildren<Text>().text = "Back";
+        HideMechButton.transform.localScale = MechButton.transform.localScale;
+        HideMechButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideMechButton.GetComponent<Button>().onClick.AddListener(DisplayMechs);
+        MechHolderUIList.Add(HideMechButton);
+    }
+
+    public void ChangeMechName(string newName)
+    {
+        CurrentMechs[MechIndex].name = newName;
     }
 
     public void AddBackButton()
