@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour {
-
-    public GameObject MenuButtons;
-    public GameObject DateCashUI;
-
 	// Use this for initialization
 	void Start () {
 		
@@ -17,8 +13,10 @@ public class UIManager : MonoBehaviour {
 		
 	}
 
-    public void HideMenu()
+    public void HideAllMenus()
     {
-        GameObject[] MenuButtonsList = MenuButtons.GetComponentsInChildren<GameObject>();
+        gameObject.GetComponent<CharacterManager>().HideCrew();
+        gameObject.GetComponent<MechManager>().HideMechs();
+        gameObject.GetComponent<MissionManager>().HideMissions();
     }
 }

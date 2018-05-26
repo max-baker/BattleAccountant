@@ -10,11 +10,19 @@ public static class StaticValues {
     public static int StartYear = 3000;
     public static int CrewCost = 1;
     public static int MaxCrew = 15;
-    public static string[] CrewFirstNames= { "Bill" , "Tom", "Darius", "Max", "Jericho", "Marcus", "Luke"};
+    public static string[] CrewFirstNames= { "Bill" , "Tom", "Darius", "Max", "Jericho", "Marcus", "Luke"
+    ,"Abel", "Adam", "Alexis", "August", "Barry", "Brian", "Carmen", "Casey"};
+    public static string[] MechModelNames = {"Mad Cat", "Atlas", "Prometheus",
+    "Ragnarok", "Rifleman", "Owens", "Star Adder"};
 
     public static string GenerateFirstName()
     {
         return CrewFirstNames[(int)Random.Range(0,CrewFirstNames.Length)];
+    }
+
+    public static string GenerateMechModel()
+    {
+        return MechModelNames[(int)Random.Range(0, MechModelNames.Length)];
     }
 
     public static int DaysInMonth(int month)

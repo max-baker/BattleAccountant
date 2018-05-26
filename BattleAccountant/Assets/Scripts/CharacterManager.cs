@@ -30,7 +30,7 @@ public class CharacterManager:MonoBehaviour  {
     public GameObject CrewButton;
     public GameObject CrewMemberContainer;
     public GameObject UICanvas;
-    public List<GameObject> CrewHolderUIList = new List<GameObject>();
+    [HideInInspector] public List<GameObject> CrewHolderUIList = new List<GameObject>();
 
     public void Start()
     {
@@ -58,6 +58,7 @@ public class CharacterManager:MonoBehaviour  {
 
     public void DisplayCrew()
     {
+        gameObject.GetComponent<UIManager>().HideAllMenus();
         CrewButton.GetComponent<Button>().interactable = false;
         int i = 0;
         foreach (CrewMember crew in CurrentCrew)
