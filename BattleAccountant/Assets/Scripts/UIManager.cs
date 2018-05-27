@@ -18,5 +18,7 @@ public class UIManager : MonoBehaviour {
         gameObject.GetComponent<CharacterManager>().HideCrew();
         gameObject.GetComponent<MechManager>().HideMechs();
         gameObject.GetComponent<MissionManager>().HideMissions();
+        gameObject.GetComponent<ShipManager>().HideShip();
+        gameObject.GetComponent<BalanceManager>().HideBalance();
     }
 }
