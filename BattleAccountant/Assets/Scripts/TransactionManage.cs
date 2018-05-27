@@ -95,4 +95,14 @@ public class TransactionManage : MonoBehaviour {
     {
         return amount < cash;
     }
+
+    public void MakeCash(int amount)
+    {
+        cash+=amount;
+    }
+
+    public void PassTime(int DaysPast)
+    {
+        day += DaysPast;
+    }
 }

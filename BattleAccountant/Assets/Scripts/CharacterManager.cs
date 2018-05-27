@@ -103,6 +103,21 @@ public class CharacterManager:MonoBehaviour  {
         CrewButton.GetComponent<Button>().interactable = true;
     }
 
+    public void KillCrew(int Members)
+    {
+        while (Members > 0)
+        {
+            if (CurrentCrew.Count <= 0)
+            {
+                print("No Crew, You Lose");
+                break;
+            }
+            int i = (int)Random.Range(0, CurrentCrew.Count);
+            CurrentCrew.RemoveAt(i);
+            Members--;
+        }
+    }
+
     public void HireCrewMember()
     {
         if (this.gameObject.GetComponent<TransactionManage>().SpendCash(StaticValues.CrewCost))

@@ -93,7 +93,7 @@ public class MechManager : MonoBehaviour {
     {
         MechIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
         gameObject.GetComponent<UIManager>().HideAllMenus();
-        print(CurrentMechs[MechIndex].OutputMechString());
+        MechButton.GetComponent<Button>().interactable = false;
         GameObject MechHolder = Instantiate(MechImageBG);
         MechHolder.transform.position = MechImageBG.transform.position;
         MechHolderUIList.Add(MechHolder);
@@ -166,5 +166,20 @@ public class MechManager : MonoBehaviour {
         HideMechButton.transform.localPosition = new Vector3(120, -220, 0);
         HideMechButton.GetComponent<Button>().onClick.AddListener(HideMechs);
         MechHolderUIList.Add(HideMechButton);
+    }
+
+    public void DestroyMechs(int NumberOfMechs)
+    {
+        while (NumberOfMechs > 0)
+        {
+            if (CurrentMechs.Count <= 0)
+            {
+                print("No Mechs");
+                break;
+            }
+            int i = (int)Random.Range(0, CurrentMechs.Count);
+            CurrentMechs.RemoveAt(i);
+            NumberOfMechs--;
+        }
     }
 }
