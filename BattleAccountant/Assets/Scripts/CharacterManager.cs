@@ -120,10 +120,11 @@ public class CharacterManager:MonoBehaviour  {
 
     public void HireCrewMember()
     {
-        if (this.gameObject.GetComponent<TransactionManage>().SpendCash(StaticValues.CrewCost))
+        if (CurrentCrew.Count < gameObject.GetComponent<ShipManager>().ShipCrewLimit())
         {
-            if (CurrentCrew.Count < StaticValues.MaxCrew)
+            if (this.gameObject.GetComponent<TransactionManage>().SpendCash(StaticValues.CrewCost))
             {
+            
                 foreach (GameObject elem in CrewHolderUIList)
                 {
                     Destroy(elem);
@@ -133,14 +134,14 @@ public class CharacterManager:MonoBehaviour  {
             }
             else
             {
-                //Handles Max Crew
-                print("ALready at Max Crew");
+                //Handle no money
+                print("No Cash");
             }
-        }
+        }       
         else
-        {
-            //Handle no money
-            print("No Cash");
+            {
+            //Handles Max Crew
+            print("ALready at Max Crew");
         }
     }
 

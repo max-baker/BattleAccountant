@@ -39,7 +39,7 @@ public class MechManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        CurrentMechs = GenerateStartingMechs(5);
+        CurrentMechs = GenerateStartingMechs(4);
         MechButton.GetComponent<Button>().onClick.AddListener(DisplayMechs);
     }
 	

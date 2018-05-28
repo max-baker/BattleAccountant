@@ -10,6 +10,8 @@ public static class StaticValues {
     public static int StartYear = 3000;
     public static int CrewCost = 1;
     public static int MaxCrew = 15;
+    public static int ShipMaxCrew = 6;
+    public static int ShipMaxMechs = 4;
     public static string[] CrewFirstNames= { "Bill" , "Tom", "Darius", "Max", "Jericho", "Marcus", "Luke"
     ,"Abel", "Adam", "Alexis", "August", "Barry", "Brian", "Carmen", "Casey"};
     public static string[] MechModelNames = { "Mad Cat", "Rifleman", "Star Adder" };
