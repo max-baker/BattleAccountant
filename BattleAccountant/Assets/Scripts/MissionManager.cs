@@ -10,16 +10,18 @@ public class MissionManager : MonoBehaviour {
     {
         public string Faction;
         public int DaysToExpiration;
+        public string Location;
 
         public MissionData()
         {
             DaysToExpiration = (int)Random.Range(1, 20);
             Faction = StaticValues.GenerateFaction();
+            Location = StaticValues.GetRandomPlanet();
         }
 
         public string OutputMissionString()
         {
-            return Faction + " : Expires in "  + DaysToExpiration.ToString() +" Days";
+            return Faction + " : Expires in "  + DaysToExpiration.ToString() +" Days : On "+Location;
         }
     }
 
@@ -78,6 +80,8 @@ public class MissionManager : MonoBehaviour {
             MissionHolder.GetComponent<Button>().onClick.AddListener(ShowMissionDetails);
             MissionHolder.name = i.ToString();
             i++;
+            bool OnPlanet = (mission.Location == gameObject.GetComponent<ShipManager>().GetCurrentPlanet());
+            MissionHolder.GetComponent<Button>().interactable = OnPlanet;
         }
         AddBackButton();
     }

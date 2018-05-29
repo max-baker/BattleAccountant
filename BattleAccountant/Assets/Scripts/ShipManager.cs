@@ -28,7 +28,7 @@ public class ShipManager : MonoBehaviour {
     public GameObject ShipImage;
     public GameObject ShipDetails;
     public GameObject Map;
-    private string CurrentPlanet = "Icarus";
+    private string CurrentPlanet = "Helios";
     [HideInInspector] public List<GameObject> ShipUIList = new List<GameObject>();
 
     // Use this for initialization
@@ -204,5 +204,10 @@ public class ShipManager : MonoBehaviour {
         gameObject.GetComponent<TransactionManage>().ChangePlanet(Destination);
         CurrentPlanet = Destination;
         gameObject.GetComponent<UIManager>().HideAllMenus();
+    }
+
+    public string GetCurrentPlanet()
+    {
+        return CurrentPlanet;
     }
 }

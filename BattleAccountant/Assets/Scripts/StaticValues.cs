@@ -31,6 +31,11 @@ public static class StaticValues {
         return PlanetDistances[startIndex, endIndex];
     }
 
+    public static string GetRandomPlanet()
+    {
+        return PlanetNames[(int)Random.Range(0, PlanetNames.Count)];
+    }
+
     public static string GenerateFirstName()
     {
         return CrewFirstNames[(int)Random.Range(0,CrewFirstNames.Length)];

@@ -27,6 +27,7 @@ public class TransactionManage : MonoBehaviour {
         day = StaticValues.StartDay;
         year = StaticValues.StartYear;
         lastTime = Time.time;
+        PlanetHolder.GetComponent<Text>().text = gameObject.GetComponent<ShipManager>().GetCurrentPlanet();
         DisplayCash();
     }
 
