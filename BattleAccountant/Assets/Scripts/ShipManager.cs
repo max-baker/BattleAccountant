@@ -27,6 +27,8 @@ public class ShipManager : MonoBehaviour {
     public GameObject ShipImageBG;
     public GameObject ShipImage;
     public GameObject ShipDetails;
+    public GameObject Map;
+    private string CurrentPlanet = "Icarus";
     [HideInInspector] public List<GameObject> ShipUIList = new List<GameObject>();
 
     // Use this for initialization
@@ -64,6 +66,7 @@ public class ShipManager : MonoBehaviour {
         TravelButton.GetComponentInChildren<Text>().text = "Map";
         TravelButton.transform.localScale = ShipButton.transform.localScale;
         TravelButton.transform.localPosition = new Vector3(-340, -120, 0);
+        TravelButton.GetComponent<Button>().onClick.AddListener(DisplayMap);
         ShipUIList.Add(TravelButton);
 
         GameObject ShipInfo = Instantiate(ShipDetails);
@@ -113,5 +116,93 @@ public class ShipManager : MonoBehaviour {
         HideShipButton.transform.localPosition = new Vector3(120, -220, 0);
         HideShipButton.GetComponent<Button>().onClick.AddListener(HideShip);
         ShipUIList.Add(HideShipButton);
+    }
+
+    public void DisplayMap()
+    {
+        gameObject.GetComponent<UIManager>().HideAllMenus();
+
+        GameObject HideShipButton = Instantiate(ShipButton);
+        HideShipButton.GetComponent<Button>().interactable = true;
+        HideShipButton.transform.SetParent(UICanvas.transform);
+        HideShipButton.GetComponentInChildren<Text>().text = "Back";
+        HideShipButton.transform.localScale = ShipButton.transform.localScale;
+        HideShipButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideShipButton.GetComponent<Button>().onClick.AddListener(DisplayShip);
+        ShipUIList.Add(HideShipButton);
+
+        ShipButton.GetComponent<Button>().interactable = false;
+
+        GameObject MapHolder = Instantiate(Map);
+        MapHolder.SetActive(true);
+        MapHolder.transform.SetParent(UICanvas.transform);
+        MapHolder.transform.position = Map.transform.position;
+        MapHolder.transform.localScale = Map.transform.localScale;
+        Button[] buttons = MapHolder.GetComponentsInChildren<Button>();
+        foreach (Button attr in buttons)
+        {
+            if (attr.gameObject.name == "IcarusButton")
+            {
+                if (CurrentPlanet == "Icarus")
+                {
+                    attr.interactable = false;
+                }
+                else
+                {
+                    attr.onClick.AddListener(() => MovePlanets("Icarus"));
+                    int TravelTime = StaticValues.GetDistanceBetweenPlanets(CurrentPlanet, "Icarus");
+                    attr.gameObject.GetComponentInChildren<Text>().text = "Icarus: " + TravelTime + " Days";
+                }
+            }
+            if (attr.gameObject.name == "HeliosButton")
+            {
+                if (CurrentPlanet == "Helios")
+                {
+                    attr.interactable = false;
+                }
+                else
+                {
+                    attr.onClick.AddListener(() => MovePlanets("Helios"));
+                    int TravelTime = StaticValues.GetDistanceBetweenPlanets(CurrentPlanet, "Helios");
+                    attr.gameObject.GetComponentInChildren<Text>().text = "Helios: " + TravelTime + " Days";
+                }
+            }
+            if (attr.gameObject.name == "CerebusButton")
+            {
+                if (CurrentPlanet == "Cerebus")
+                {
+                    attr.interactable = false;
+                }
+                else
+                {
+                    attr.onClick.AddListener(() => MovePlanets("Cerebus"));
+                    int TravelTime = StaticValues.GetDistanceBetweenPlanets(CurrentPlanet, "Cerebus");
+                    attr.gameObject.GetComponentInChildren<Text>().text = "Cerebus: " + TravelTime + " Days";
+                }
+            }
+            if (attr.gameObject.name == "KronosButton")
+            {
+                if (CurrentPlanet == "Kronos")
+                {
+                    attr.interactable = false;
+                }
+                else
+                {
+                    attr.onClick.AddListener(() => MovePlanets("Kronos"));
+                    int TravelTime = StaticValues.GetDistanceBetweenPlanets(CurrentPlanet, "Kronos");
+                    attr.gameObject.GetComponentInChildren<Text>().text = "Kronos: " + TravelTime + " Days";
+                }
+            }
+        }
+        ShipUIList.Add(MapHolder);
+    }
+
+    public void MovePlanets(string Destination)
+    {
+        int TravelTime = StaticValues.GetDistanceBetweenPlanets(CurrentPlanet, Destination);
+        gameObject.GetComponent<TransactionManage>().PassTime(TravelTime);
+        gameObject.GetComponent<TransactionManage>().ChangePlanet(Destination);
+        CurrentPlanet = Destination;
+        gameObject.GetComponent<UIManager>().HideAllMenus();
     }
 }

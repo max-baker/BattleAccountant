@@ -9,6 +9,7 @@ public class TransactionManage : MonoBehaviour {
     public GameObject TimeDisplay;
     public GameObject PlayPauseText;
     public GameObject FastForwardText;
+    public GameObject PlanetHolder;
 
     private int cash;
     private int month;
@@ -104,5 +105,10 @@ public class TransactionManage : MonoBehaviour {
     public void PassTime(int DaysPast)
     {
         day += DaysPast;
+    }
+
+    public void ChangePlanet(string planet)
+    {
+        PlanetHolder.GetComponent<Text>().text = planet;
     }
 }

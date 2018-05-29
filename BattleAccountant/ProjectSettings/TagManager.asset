@@ -44,6 +44,9 @@ TagManager:
   - name: Floor
     uniqueID: 2154323865
     locked: 0
+  - name: Map
+    uniqueID: 273949121
+    locked: 0
   - name: UI
     uniqueID: 2835891703
     locked: 0

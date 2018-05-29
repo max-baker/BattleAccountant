@@ -17,6 +17,19 @@ public static class StaticValues {
     public static string[] MechModelNames = { "Mad Cat", "Rifleman", "Star Adder" };
     public static string[] MechNames = { "Alyosius", "Valerian", "Olympus" , "Canus"};
     public static string[] FactionNames = {"Reim Empire","Auran Collective", "Dragoons" };
+    public static List<string> PlanetNames = new List<string>(new string[] { "Icarus", "Helios", "Cerebus", "Kronos" });
+    public static int[,] PlanetDistances =new int[,] 
+    { { 0,1,2,3 },
+      { 1,0,1,2 },
+      { 2,1,0,1 },
+      { 3,2,1,0 } };
+
+    public static int GetDistanceBetweenPlanets(string start, string end)
+    {
+        int startIndex = PlanetNames.IndexOf(start);
+        int endIndex = PlanetNames.IndexOf(end);
+        return PlanetDistances[startIndex, endIndex];
+    }
 
     public static string GenerateFirstName()
     {
