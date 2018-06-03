@@ -38,11 +38,11 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Floor
     uniqueID: 2154323865
+    locked: 0
+  - name: MapBG
+    uniqueID: 331021851
     locked: 0
   - name: Map
     uniqueID: 273949121
@@ -52,4 +52,7 @@ TagManager:
     locked: 0
   - name: Images
     uniqueID: 1346137403
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0

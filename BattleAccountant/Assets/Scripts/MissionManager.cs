@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class MissionManager : MonoBehaviour {
 
@@ -11,10 +12,12 @@ public class MissionManager : MonoBehaviour {
         public string Faction;
         public int DaysToExpiration;
         public string Location;
+        public int MemberSlots;
 
         public MissionData()
         {
             DaysToExpiration = (int)Random.Range(1, 20);
+            MemberSlots = (int)Random.Range(1, 4);
             Faction = StaticValues.GenerateFaction();
             Location = StaticValues.GetRandomPlanet();
         }
@@ -31,6 +34,8 @@ public class MissionManager : MonoBehaviour {
     public GameObject UICanvas;
     public GameObject MissionContainer;
     public GameObject MissionParams;
+    public GameObject SelectorSlot;
+    [HideInInspector] public List<GameObject> MechCrewSelectors = new List<GameObject>();
     [HideInInspector] public List<GameObject> MissionHolderUIList = new List<GameObject>();
 
     // Use this for initialization
@@ -110,10 +115,44 @@ public class MissionManager : MonoBehaviour {
         {
             if (button.gameObject.name == "EmbarkButton")
             {
-                button.onClick.AddListener(GoOnMission);
+                button.onClick.AddListener(VerifyMissionParams);
             }
         }
         AddBackButton();
+        MechCrewSelectors.Clear();
+        LoadCrewMechSelectors(MissionDetails);       
+    }
+
+    public void LoadCrewMechSelectors(GameObject MissionParams)
+    {
+        List<string> CrewList = this.gameObject.GetComponent<CharacterManager>().GetCrewNames();
+        CrewList.Add("None");
+        List<string> MechList = this.gameObject.GetComponent<MechManager>().GetMechNames();
+
+        SelectorSlot.SetActive(false);
+        for (int i=0; i< 5; i++)
+        {
+            GameObject Component = Instantiate(SelectorSlot, UICanvas.transform);
+            Component.SetActive(true);
+            Component.transform.localScale = SelectorSlot.transform.localScale;
+            Component.transform.position = new Vector3(-8+(4*i), 0, 0);
+            bool ActiveSlot = (i < AvailableMissions[MissionIndex].MemberSlots);
+            Dropdown CrewDrop = Component.transform.Find("CrewSelector").GetComponent<Dropdown>();
+            CrewDrop.ClearOptions();               
+            CrewDrop.interactable = ActiveSlot;
+            Dropdown MechDrop = Component.transform.Find("MechSelector").GetComponent<Dropdown>();
+            MechDrop.ClearOptions();
+            if (ActiveSlot)
+            {
+                CrewDrop.AddOptions(CrewList);
+                CrewDrop.value = (i<CrewList.Count)?i:0;
+                MechDrop.AddOptions(MechList);
+                MechDrop.value = (i < MechList.Count) ? i : 0;
+            }
+            MechDrop.interactable = ActiveSlot;
+            MissionHolderUIList.Add(Component);
+            MechCrewSelectors.Add(Component);
+        }
     }
 
     public void AddBackButton()
@@ -123,12 +162,44 @@ public class MissionManager : MonoBehaviour {
         HideMissionButton.transform.SetParent(UICanvas.transform);
         HideMissionButton.GetComponentInChildren<Text>().text = "Back";
         HideMissionButton.transform.localScale = MissionButton.transform.localScale;
-        HideMissionButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideMissionButton.transform.localPosition = new Vector3(120, StaticValues.BackButtonY, 0);
         HideMissionButton.GetComponent<Button>().onClick.AddListener(HideMissions);
         MissionHolderUIList.Add(HideMissionButton);
     }
 
-    public void GoOnMission()
+    public void VerifyMissionParams()
+    {
+        List<string> CrewOnMission = new List<string>();
+        List<string> MechsOnMission = new List<string>();
+        foreach(GameObject selector in MechCrewSelectors)
+        {
+            Dropdown CrewDrop = selector.transform.Find("CrewSelector").GetComponent<Dropdown>();
+            Dropdown MechDrop = selector.transform.Find("MechSelector").GetComponent<Dropdown>();
+            if (CrewDrop.interactable && MechDrop.interactable)
+            {
+                CrewOnMission.Add(CrewDrop.options[CrewDrop.value].text);
+                MechsOnMission.Add(MechDrop.options[MechDrop.value].text);
+            }
+        }
+        print(CrewOnMission);
+        print(MechsOnMission);
+        if(CheckListForDuplicates(CrewOnMission) && CheckListForDuplicates(MechsOnMission))
+        {
+            GoOnMission(CrewOnMission, MechsOnMission);
+        }
+        else
+        {
+            print("Duplicates going on mission");
+        }
+        
+    }
+
+    private bool CheckListForDuplicates(List<string> myList)
+    {
+        return (myList.Count==myList.Distinct().Count());
+    }
+
+    public void GoOnMission(List<string> MissionCrew, List<string> MissionMechs)
     {
         gameObject.GetComponent<UIManager>().HideAllMenus();
         gameObject.GetComponent<AudioSource>().Play();

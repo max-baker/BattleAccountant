@@ -65,7 +65,7 @@ public class ShipManager : MonoBehaviour {
         TravelButton.transform.SetParent(UICanvas.transform);
         TravelButton.GetComponentInChildren<Text>().text = "Map";
         TravelButton.transform.localScale = ShipButton.transform.localScale;
-        TravelButton.transform.localPosition = new Vector3(-340, -120, 0);
+        TravelButton.transform.localPosition = new Vector3(-280, -160, 0);
         TravelButton.GetComponent<Button>().onClick.AddListener(DisplayMap);
         ShipUIList.Add(TravelButton);
 
@@ -113,7 +113,7 @@ public class ShipManager : MonoBehaviour {
         HideShipButton.transform.SetParent(UICanvas.transform);
         HideShipButton.GetComponentInChildren<Text>().text = "Back";
         HideShipButton.transform.localScale = ShipButton.transform.localScale;
-        HideShipButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideShipButton.transform.localPosition = new Vector3(120, StaticValues.BackButtonY, 0);
         HideShipButton.GetComponent<Button>().onClick.AddListener(HideShip);
         ShipUIList.Add(HideShipButton);
     }

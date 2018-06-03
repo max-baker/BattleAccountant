@@ -10,7 +10,7 @@ public class CharacterManager:MonoBehaviour  {
         private int health;
         private int fatigue;
         private int reputation;
-        private string name;
+        public string name;
 
         public CrewMember()
         {
@@ -25,11 +25,11 @@ public class CharacterManager:MonoBehaviour  {
             return name + " : " + health + " health : " + fatigue + " fatigue : " + reputation + " reputation";
         }
     }
-
-    private List<CrewMember> CurrentCrew;
+    
     public GameObject CrewButton;
     public GameObject CrewMemberContainer;
     public GameObject UICanvas;
+    private List<CrewMember> CurrentCrew;
     [HideInInspector] public List<GameObject> CrewHolderUIList = new List<GameObject>();
 
     public void Start()
@@ -79,7 +79,7 @@ public class CharacterManager:MonoBehaviour  {
         HireButton.transform.SetParent(UICanvas.transform);
         HireButton.GetComponentInChildren<Text>().text = "Hire Crewman";
         HireButton.transform.localScale = CrewMemberContainer.transform.localScale;
-        HireButton.transform.localPosition = new Vector3(-80, -220, 0);
+        HireButton.transform.localPosition = new Vector3(-80, StaticValues.BackButtonY, 0);
         HireButton.GetComponent<Button>().onClick.AddListener(HireCrewMember);
         CrewHolderUIList.Add(HireButton);
 
@@ -89,7 +89,7 @@ public class CharacterManager:MonoBehaviour  {
         HideCrewButton.transform.SetParent(UICanvas.transform);
         HideCrewButton.GetComponentInChildren<Text>().text = "Back";
         HideCrewButton.transform.localScale = CrewMemberContainer.transform.localScale;
-        HideCrewButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideCrewButton.transform.localPosition = new Vector3(120, StaticValues.BackButtonY, 0);
         HideCrewButton.GetComponent<Button>().onClick.AddListener(HideCrew);
         CrewHolderUIList.Add(HideCrewButton);
     }
@@ -143,6 +143,16 @@ public class CharacterManager:MonoBehaviour  {
             //Handles Max Crew
             print("ALready at Max Crew");
         }
+    }
+
+    public List<string> GetCrewNames()
+    {
+        List<string> CrewMembers = new List<string>();
+        foreach (CrewMember crew in CurrentCrew)
+        {
+            CrewMembers.Add(crew.name);
+        }
+        return CrewMembers;
     }
 
 }

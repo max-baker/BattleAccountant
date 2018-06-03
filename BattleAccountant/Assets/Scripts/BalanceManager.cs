@@ -42,7 +42,7 @@ public class BalanceManager : MonoBehaviour {
         HideBalanceButton.transform.SetParent(UICanvas.transform);
         HideBalanceButton.GetComponentInChildren<Text>().text = "Back";
         HideBalanceButton.transform.localScale = BalanceButton.transform.localScale;
-        HideBalanceButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideBalanceButton.transform.localPosition = new Vector3(120, StaticValues.BackButtonY, 0);
         HideBalanceButton.GetComponent<Button>().onClick.AddListener(HideBalance);
         BalanceUIList.Add(HideBalanceButton);
     }

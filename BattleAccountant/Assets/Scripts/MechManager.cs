@@ -163,7 +163,7 @@ public class MechManager : MonoBehaviour {
         HideMechButton.transform.SetParent(UICanvas.transform);
         HideMechButton.GetComponentInChildren<Text>().text = "Back";
         HideMechButton.transform.localScale = MechButton.transform.localScale;
-        HideMechButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideMechButton.transform.localPosition = new Vector3(120, StaticValues.BackButtonY, 0);
         HideMechButton.GetComponent<Button>().onClick.AddListener(HideMechs);
         MechHolderUIList.Add(HideMechButton);
     }
@@ -181,5 +181,15 @@ public class MechManager : MonoBehaviour {
             CurrentMechs.RemoveAt(i);
             NumberOfMechs--;
         }
+    }
+
+    public List<string> GetMechNames()
+    {
+        List<string> MechNames = new List<string>();
+        foreach (MechData mech in CurrentMechs)
+        {
+            MechNames.Add(mech.name);
+        }
+        return MechNames;
     }
 }
