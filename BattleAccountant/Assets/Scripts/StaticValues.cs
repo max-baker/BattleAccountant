@@ -24,12 +24,48 @@ public static class StaticValues {
       { 1,0,1,2 },
       { 2,1,0,1 },
       { 3,2,1,0 } };
+    public static string[] MadCatWeaponSlots = { "Left Shoulder","Right Shoulder","Chest Mount"};
+    public static string[] RiflemanWeaponSlots = { "Left Arm", "Right Arm"};
+    public static string[] StarAdderWeaponSlots = { "Left Shoulder", "Right Shoulder", "Left Arm", "Right Arm" };
+    public static List<string> WeaponOptions = new List<string>(new string[] { "Missile Launcher", "Laser Beam", "Ballistic Repeater" });
 
     public static int GetDistanceBetweenPlanets(string start, string end)
     {
         int startIndex = PlanetNames.IndexOf(start);
         int endIndex = PlanetNames.IndexOf(end);
         return PlanetDistances[startIndex, endIndex];
+    }
+
+    public static int GetWeaponSlotsForMechModel(string mechModel)
+    {
+        switch (mechModel)
+        {
+            case "Mad Cat":
+                return 3;
+            case "Rifleman":
+                return 2;
+            case "Star Adder":
+                return 4;
+            default:
+                Debug.LogError("Mech Model Not Found");
+                return -1;
+        }
+    }
+
+    public static string GetWeaponSlotsName(string mechModel, int slotNumber)
+    {
+        switch (mechModel)
+        {
+            case "Mad Cat":
+                return MadCatWeaponSlots[slotNumber];
+            case "Rifleman":
+                return RiflemanWeaponSlots[slotNumber];
+            case "Star Adder":
+                return StarAdderWeaponSlots[slotNumber];
+            default:
+                Debug.LogError("Mech Model Not Found");
+                return "";
+        }
     }
 
     public static string GetRandomPlanet()

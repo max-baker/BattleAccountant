@@ -11,12 +11,14 @@ public class MechManager : MonoBehaviour {
         public string model;
         public int age;
         public string name;
+        public List<int> SelectedWeapons;
 
         public MechData()
         {
             age = (int)Random.Range(1, 20);
             model = StaticValues.GenerateMechModel();
             name = StaticValues.GenerateMechName();
+            SelectedWeapons = new List<int>(new int[] {0,0,0,0});
         }
 
         public string OutputMechString()
@@ -35,6 +37,7 @@ public class MechManager : MonoBehaviour {
     public GameObject MechImage3;
     public GameObject MechImageBG;
     public GameObject MechDataHolder;
+    public GameObject WeaponSlot;
     [HideInInspector] public List<GameObject> MechHolderUIList = new List<GameObject>();
 
     // Use this for initialization
@@ -149,6 +152,26 @@ public class MechManager : MonoBehaviour {
         HideMechButton.transform.localPosition = new Vector3(120, -220, 0);
         HideMechButton.GetComponent<Button>().onClick.AddListener(DisplayMechs);
         MechHolderUIList.Add(HideMechButton);
+
+        DisplayMechWeaponSlots();
+    }
+
+    private void DisplayMechWeaponSlots()
+    {
+        int NumberOfSlots = StaticValues.GetWeaponSlotsForMechModel(CurrentMechs[MechIndex].model);
+        for(int i=0; i < NumberOfSlots; i++)
+        {
+            GameObject WeaponHolder = Instantiate(WeaponSlot, UICanvas.transform);
+            WeaponHolder.SetActive(true);     
+            WeaponHolder.transform.Find("Label").GetComponent<Text>().text = StaticValues.GetWeaponSlotsName(CurrentMechs[MechIndex].model, i) + ':';
+            WeaponHolder.GetComponentInChildren<Dropdown>().ClearOptions();
+            WeaponHolder.GetComponentInChildren<Dropdown>().value = CurrentMechs[MechIndex].SelectedWeapons[i];
+            WeaponHolder.GetComponentInChildren<Dropdown>().AddOptions(StaticValues.WeaponOptions);
+            //WeaponHolder.transform.position = new Vector3(450, 50 - (i * 100), 0);
+            WeaponHolder.transform.position = new Vector3(8, 1-(1.5f*i), 0); //Postition multiplied by 52, idk why
+            WeaponHolder.transform.localScale = WeaponSlot.transform.localScale;            
+            MechHolderUIList.Add(WeaponHolder);
+        }
     }
 
     public void ChangeMechName(string newName)
