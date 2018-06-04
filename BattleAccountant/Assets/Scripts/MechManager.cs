@@ -27,8 +27,8 @@ public class MechManager : MonoBehaviour {
         }
     }
 
-    private List<MechData> CurrentMechs;
-    private int MechIndex;
+    public List<MechData> CurrentMechs;
+    public int MechIndex;
     public GameObject MechButton;
     public GameObject MechContainer;
     public GameObject UICanvas;
@@ -149,7 +149,7 @@ public class MechManager : MonoBehaviour {
         HideMechButton.transform.SetParent(UICanvas.transform);
         HideMechButton.GetComponentInChildren<Text>().text = "Back";
         HideMechButton.transform.localScale = MechButton.transform.localScale;
-        HideMechButton.transform.localPosition = new Vector3(120, -220, 0);
+        HideMechButton.transform.localPosition = new Vector3(120, StaticValues.BackButtonY, 0);
         HideMechButton.GetComponent<Button>().onClick.AddListener(DisplayMechs);
         MechHolderUIList.Add(HideMechButton);
 
@@ -164,14 +164,20 @@ public class MechManager : MonoBehaviour {
             GameObject WeaponHolder = Instantiate(WeaponSlot, UICanvas.transform);
             WeaponHolder.SetActive(true);     
             WeaponHolder.transform.Find("Label").GetComponent<Text>().text = StaticValues.GetWeaponSlotsName(CurrentMechs[MechIndex].model, i) + ':';
-            WeaponHolder.GetComponentInChildren<Dropdown>().ClearOptions();
-            WeaponHolder.GetComponentInChildren<Dropdown>().value = CurrentMechs[MechIndex].SelectedWeapons[i];
+            WeaponHolder.GetComponentInChildren<Dropdown>().ClearOptions();         
+            WeaponHolder.GetComponent<WeaponSlotManager>().SlotNumber = i;
             WeaponHolder.GetComponentInChildren<Dropdown>().AddOptions(StaticValues.WeaponOptions);
+            WeaponHolder.GetComponentInChildren<Dropdown>().value = CurrentMechs[MechIndex].SelectedWeapons[i];
             //WeaponHolder.transform.position = new Vector3(450, 50 - (i * 100), 0);
             WeaponHolder.transform.position = new Vector3(8, 1-(1.5f*i), 0); //Postition multiplied by 52, idk why
             WeaponHolder.transform.localScale = WeaponSlot.transform.localScale;            
             MechHolderUIList.Add(WeaponHolder);
         }
+    }
+
+    public void ChangeMechWeapon(int SlotNumber, int NewWeapon)
+    {
+        CurrentMechs[MechIndex].SelectedWeapons[SlotNumber] = NewWeapon;
     }
 
     public void ChangeMechName(string newName)
