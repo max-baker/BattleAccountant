@@ -36,6 +36,11 @@ public static class StaticValues {
         return PlanetDistances[startIndex, endIndex];
     }
 
+    public static float RoundFloatToTwoDecimals(float amount)
+    {
+        return (float)((int)(amount * 100) / 100f);
+    }
+
     public static int GetWeaponSlotsForMechModel(string mechModel)
     {
         switch (mechModel)

@@ -45,22 +45,28 @@ public class TransactionManage : MonoBehaviour {
                 lastTime = Time.time;
                 day++;
                 DisplayTime();
+
                 //Time Events:
-                cash+=3;
                 DisplayCash();
-                if (traveling)
-                {
-                    daysLeftInVoyage--;
-                    if (daysLeftInVoyage <= 0)
-                    {
-                        traveling = false;
-                        PlanetHolder.GetComponent<Text>().text = destination;
-                        OrbitBackground.SetActive(true);
-                        TravelBackground.SetActive(false);
-                        gameObject.GetComponent<ShipManager>().ArriveAtPlanet(destination);
-                        gameObject.GetComponent<UIManager>().HideAllMenus();
-                    }
-                }
+                TravelProgress();
+                gameObject.GetComponent<BalanceManager>().DecrementDays();
+            }
+        }
+    }
+
+    private void TravelProgress()
+    {
+        if (traveling)
+        {
+            daysLeftInVoyage--;
+            if (daysLeftInVoyage <= 0)
+            {
+                traveling = false;
+                PlanetHolder.GetComponent<Text>().text = destination;
+                OrbitBackground.SetActive(true);
+                TravelBackground.SetActive(false);
+                gameObject.GetComponent<ShipManager>().ArriveAtPlanet(destination);
+                gameObject.GetComponent<UIManager>().HideAllMenus();
             }
         }
     }

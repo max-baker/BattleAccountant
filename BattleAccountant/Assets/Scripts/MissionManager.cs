@@ -16,7 +16,7 @@ public class MissionManager : MonoBehaviour {
 
         public MissionData()
         {
-            DaysToExpiration = (int)Random.Range(1, 20);
+            DaysToExpiration = (int)Random.Range(5, 50);
             MemberSlots = (int)Random.Range(1, 4);
             Faction = StaticValues.GenerateFaction();
             Location = StaticValues.GetRandomPlanet();

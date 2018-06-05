@@ -13,6 +13,7 @@ public class AudioOnClick : MonoBehaviour {
         if (source == null)
         {
             source = gameObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
             source.clip = sound;
         }
         gameObject.GetComponent<Button>().onClick.AddListener(PlaySound);
