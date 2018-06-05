@@ -143,7 +143,7 @@ public class ShipManager : MonoBehaviour {
         {
             if (attr.gameObject.name == "IcarusButton")
             {
-                if (CurrentPlanet == "Icarus")
+                if (CurrentPlanet == "Icarus" || CurrentPlanet == "Space")
                 {
                     attr.interactable = false;
                 }
@@ -156,7 +156,7 @@ public class ShipManager : MonoBehaviour {
             }
             if (attr.gameObject.name == "HeliosButton")
             {
-                if (CurrentPlanet == "Helios")
+                if (CurrentPlanet == "Helios" || CurrentPlanet == "Space")
                 {
                     attr.interactable = false;
                 }
@@ -169,7 +169,7 @@ public class ShipManager : MonoBehaviour {
             }
             if (attr.gameObject.name == "CerebusButton")
             {
-                if (CurrentPlanet == "Cerebus")
+                if (CurrentPlanet == "Cerebus" || CurrentPlanet == "Space")
                 {
                     attr.interactable = false;
                 }
@@ -182,7 +182,7 @@ public class ShipManager : MonoBehaviour {
             }
             if (attr.gameObject.name == "KronosButton")
             {
-                if (CurrentPlanet == "Kronos")
+                if (CurrentPlanet == "Kronos" || CurrentPlanet == "Space")
                 {
                     attr.interactable = false;
                 }
@@ -200,10 +200,14 @@ public class ShipManager : MonoBehaviour {
     public void MovePlanets(string Destination)
     {
         int TravelTime = StaticValues.GetDistanceBetweenPlanets(CurrentPlanet, Destination);
-        gameObject.GetComponent<TransactionManage>().PassTime(TravelTime);
-        gameObject.GetComponent<TransactionManage>().ChangePlanet(Destination);
-        CurrentPlanet = Destination;
+        gameObject.GetComponent<TransactionManage>().TravelToPlanet(Destination, TravelTime);
+        CurrentPlanet = "Space";
         gameObject.GetComponent<UIManager>().HideAllMenus();
+    }
+
+    public void ArriveAtPlanet(string planet)
+    {
+        CurrentPlanet = planet;
     }
 
     public string GetCurrentPlanet()

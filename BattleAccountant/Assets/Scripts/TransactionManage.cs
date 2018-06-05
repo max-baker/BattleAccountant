@@ -10,6 +10,8 @@ public class TransactionManage : MonoBehaviour {
     public GameObject PlayPauseText;
     public GameObject FastForwardText;
     public GameObject PlanetHolder;
+    public GameObject OrbitBackground;
+    public GameObject TravelBackground;
 
     private int cash;
     private int month;
@@ -17,8 +19,11 @@ public class TransactionManage : MonoBehaviour {
     private int year;
     private bool TimePlaying = true;
     private bool FastForwarding = false;
-    private float FrameTimeDelay = 1;
-    private float lastTime; 
+    private float FrameTimeDelay = 2;
+    private float lastTime;
+    private bool traveling= false;
+    private string destination;
+    private int daysLeftInVoyage;
 
     public void Start()
     {
@@ -43,6 +48,19 @@ public class TransactionManage : MonoBehaviour {
                 //Time Events:
                 cash+=3;
                 DisplayCash();
+                if (traveling)
+                {
+                    daysLeftInVoyage--;
+                    if (daysLeftInVoyage <= 0)
+                    {
+                        traveling = false;
+                        PlanetHolder.GetComponent<Text>().text = destination;
+                        OrbitBackground.SetActive(true);
+                        TravelBackground.SetActive(false);
+                        gameObject.GetComponent<ShipManager>().ArriveAtPlanet(destination);
+                        gameObject.GetComponent<UIManager>().HideAllMenus();
+                    }
+                }
             }
         }
     }
@@ -56,7 +74,7 @@ public class TransactionManage : MonoBehaviour {
     public void ToggleFastForward()
     {
         FastForwardText.GetComponent<Text>().text = (FastForwarding) ? "1X" : "2X";
-        FrameTimeDelay = (FastForwarding) ? 1f : 0.5f;
+        FrameTimeDelay = (FastForwarding) ? 2f : 1f;
         FastForwarding = !FastForwarding;
     }
 
@@ -108,8 +126,13 @@ public class TransactionManage : MonoBehaviour {
         day += DaysPast;
     }
 
-    public void ChangePlanet(string planet)
+    public void TravelToPlanet(string planet, int travelTime)
     {
-        PlanetHolder.GetComponent<Text>().text = planet;
+        traveling = true;
+        destination = planet;
+        daysLeftInVoyage = travelTime;
+        PlanetHolder.GetComponent<Text>().text = "Space";
+        OrbitBackground.SetActive(false);
+        TravelBackground.SetActive(true);
     }
 }

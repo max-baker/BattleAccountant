@@ -20,10 +20,10 @@ public static class StaticValues {
     public static string[] FactionNames = {"Reim Empire","Auran Collective", "Dragoons" };
     public static List<string> PlanetNames = new List<string>(new string[] { "Icarus", "Helios", "Cerebus", "Kronos" });
     public static int[,] PlanetDistances =new int[,] 
-    { { 0,1,2,3 },
-      { 1,0,1,2 },
-      { 2,1,0,1 },
-      { 3,2,1,0 } };
+    { { 0,3,5,7 },
+      { 3,0,4,5 },
+      { 5,3,0,4 },
+      { 7,5,4,0 } };
     public static string[] MadCatWeaponSlots = { "Left Shoulder","Right Shoulder","Chest Mount"};
     public static string[] RiflemanWeaponSlots = { "Left Arm", "Right Arm"};
     public static string[] StarAdderWeaponSlots = { "Left Shoulder", "Right Shoulder", "Left Arm", "Right Arm" };
