@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BalanceManager : MonoBehaviour {
 
@@ -11,6 +12,8 @@ public class BalanceManager : MonoBehaviour {
     public GameObject UICanvas;
     public GameObject BalanceUI;
     [HideInInspector] public List<LoanData> CurrentLoans = new List<LoanData>();
+    [HideInInspector] public List<StockData> CurrentStocks = new List<StockData>();
+    [HideInInspector] public List<BankData> KnownBanks = new List<BankData>();
     [HideInInspector] public List<GameObject> BalanceUIList = new List<GameObject>();
 
     public class LoanData
@@ -30,9 +33,81 @@ public class BalanceManager : MonoBehaviour {
 
     }
 
+    public class StockData
+    {
+        public int InitialValue;
+        public int CurrentValue;
+
+        public StockData(int StockCost)
+        {
+            InitialValue = StockCost;
+            CurrentValue = StockCost;
+        }
+
+        public void ProgressStock()
+        {
+            float OnePercentValue = CurrentValue / 100;
+            int PercentChange = (int)Random.Range(-5, 10);
+            CurrentValue += (int)(OnePercentValue * PercentChange);
+        }
+
+    }
+
+    public class BankData
+    {
+        public int CurrentBalance;
+        public string Location;
+
+        public BankData()
+        {
+            CurrentBalance = 0;
+            Location = StaticValues.GetRandomPlanet();
+        }
+
+        public void DepositCash(int amount)
+        {
+            CurrentBalance += amount;
+        }
+
+        public bool WithdrawCash(int amount)
+        {
+            if (CurrentBalance >= amount)
+            {
+                CurrentBalance -= amount;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool CheckBalance(int amount)
+        {
+            if (CurrentBalance >= amount)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    }
+
     // Use this for initialization
     void Start () {
         BalanceButton.GetComponent<Button>().onClick.AddListener(DisplayBalance);
+        PopulateBanks();
+    }
+
+    private void PopulateBanks()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            KnownBanks.Add(new BankData());
+        }
     }
 	
 	// Update is called once per frame
@@ -50,6 +125,8 @@ public class BalanceManager : MonoBehaviour {
         //AddBackButton();
         ShowingUI = true;
         DisplayLoans();
+        DisplayStocks();
+        DisplayBanks();
     }
 
     private void DisplayLoans()
@@ -100,7 +177,13 @@ public class BalanceManager : MonoBehaviour {
         LoanTakenHolder.transform.position = new Vector3(-6.2f,3.1276f  - (1 * CurrentLoans.Count), 0);
     }
 
-    public void DecrementDays()
+    public void DayPasses()
+    {
+        DecrementLoanDays();
+        ProgressStocks();
+    }
+
+    private void DecrementLoanDays()
     {
         List<LoanData> LoansToRemove = new List<LoanData>();
         foreach(LoanData loan in CurrentLoans)
@@ -125,5 +208,93 @@ public class BalanceManager : MonoBehaviour {
         {
             DisplayBalance();
         }
+    }
+
+    public void BuyStock()
+    {
+        if (gameObject.GetComponent<TransactionManage>().SpendCash(100))
+        {
+            CurrentStocks.Add(new StockData(100));
+            DisplayBalance();
+        }
+    }
+
+    private void DisplayStocks()
+    {
+        foreach (StockData stock in CurrentStocks)
+        {
+            GameObject StockHolder = Instantiate(BalanceUI.transform.Find("StockDisplay").gameObject, UICanvas.transform);
+            StockHolder.SetActive(true);
+            BalanceUIList.Add(StockHolder);
+            StockHolder.GetComponentInChildren<Text>().text = "Value: "+stock.CurrentValue.ToString();
+            StockHolder.transform.position = new Vector3(0, 3.1276f - 1 * (CurrentStocks.IndexOf(stock) + 1), 0);
+            StockHolder.GetComponentInChildren<Button>().onClick.AddListener(SellStock);
+        }
+    }
+
+    public void SellStock()
+    {
+        int StockIndex = -(int)Mathf.Round(EventSystem.current.currentSelectedGameObject.transform.parent.position.y) +2;
+        StockData StockSold = CurrentStocks[StockIndex];
+        gameObject.GetComponent<TransactionManage>().MakeCash(StockSold.CurrentValue);
+        CurrentStocks.Remove(StockSold);
+        DisplayBalance();
+    }
+
+    private void ProgressStocks()
+    {
+        foreach(StockData stock in CurrentStocks)
+        {
+            stock.ProgressStock();
+        }
+    }
+
+    private void DisplayBanks()
+    {
+        foreach (BankData bank in KnownBanks)
+        {
+            GameObject BankHolder = Instantiate(BalanceUI.transform.Find("BankDisplay").gameObject, UICanvas.transform);
+            BankHolder.SetActive(true);
+            BalanceUIList.Add(BankHolder);
+            BankHolder.GetComponentInChildren<Text>().text = "Balance: " + bank.CurrentBalance.ToString()+"\n on "+bank.Location;
+            Button WithdrawButton = BankHolder.transform.Find("Withdraw").GetComponent<Button>();
+            Button DepositButton = BankHolder.transform.Find("Deposit").GetComponent<Button>();
+            if (bank.Location == gameObject.GetComponent<ShipManager>().GetCurrentPlanet())
+            {
+                WithdrawButton.interactable = true;
+                DepositButton.interactable = true;
+                WithdrawButton.onClick.AddListener(BankWithdraw);
+                DepositButton.onClick.AddListener(BankDeposit);
+            }
+            else
+            {
+                WithdrawButton.interactable = false;
+                DepositButton.interactable = false;
+            }
+            BankHolder.transform.position = new Vector3(6.2f, 3.1276f - 1 * (KnownBanks.IndexOf(bank) + 1), 0);            
+        }
+    }
+
+    private void BankWithdraw()
+    {
+        int BankIndex = -(int)Mathf.Round(EventSystem.current.currentSelectedGameObject.transform.parent.position.y) + 2;
+        BankData bank = KnownBanks[BankIndex];
+        if (bank.WithdrawCash(10))
+        {
+            gameObject.GetComponent<TransactionManage>().MakeCash(10);
+        }
+        DisplayBalance();
+    }
+
+    private void BankDeposit()
+    {
+        int BankIndex = -(int)Mathf.Round(EventSystem.current.currentSelectedGameObject.transform.parent.position.y) + 2;
+        BankData bank = KnownBanks[BankIndex];
+        if (gameObject.GetComponent<TransactionManage>().SpendCash(10))
+        {
+            bank.DepositCash(10);
+        }
+        DisplayBalance();
+        gameObject.GetComponent<TransactionManage>().DisplayCash();
     }
 }

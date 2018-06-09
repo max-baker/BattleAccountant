@@ -11,6 +11,7 @@ public class CharacterManager:MonoBehaviour  {
         private int fatigue;
         private int reputation;
         public string name;
+        public string role;
 
         public CrewMember()
         {
@@ -18,11 +19,12 @@ public class CharacterManager:MonoBehaviour  {
             fatigue = (int)Random.Range(0,100);
             reputation = (int)Random.Range(0,100);
             name = StaticValues.GenerateFirstName();
+            role = StaticValues.GenerateCrewRole();
         }
 
         public string OutputCrewString()
         {
-            return name + " : " + health + " health : " + fatigue + " fatigue : " + reputation + " reputation";
+            return name + " : " +  role;
         }
     }
     

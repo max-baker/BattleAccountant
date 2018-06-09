@@ -28,6 +28,12 @@ public static class StaticValues {
     public static string[] RiflemanWeaponSlots = { "Left Arm", "Right Arm"};
     public static string[] StarAdderWeaponSlots = { "Left Shoulder", "Right Shoulder", "Left Arm", "Right Arm" };
     public static List<string> WeaponOptions = new List<string>(new string[] { "Missile Launcher", "Laser Beam", "Ballistic Repeater" });
+    public static string[] CrewRoles = { "Pilot", "Engineer"};
+
+    public static string GenerateCrewRole()
+    {
+        return CrewRoles[(int)Random.Range(0, CrewRoles.Length)];
+    } 
 
     public static int GetDistanceBetweenPlanets(string start, string end)
     {

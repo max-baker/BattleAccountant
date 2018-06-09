@@ -49,7 +49,7 @@ public class TransactionManage : MonoBehaviour {
                 //Time Events:
                 DisplayCash();
                 TravelProgress();
-                gameObject.GetComponent<BalanceManager>().DecrementDays();
+                gameObject.GetComponent<BalanceManager>().DayPasses();
             }
         }
     }
